@@ -1,0 +1,3 @@
+[submodule "cytoscape-android"]
+	path = cytoscape-android
+	url = https://github.com/YuHayring/Cytoscape-android.git

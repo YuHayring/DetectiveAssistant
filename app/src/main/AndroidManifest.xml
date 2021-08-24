@@ -89,6 +89,10 @@
             android:label="@string/title_activity_case_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".view.magic.PersonGraphV3"
+            android:label="@string/title_activity_case_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".view.caselist.CaseListActivity"
             android:label="@string/title_activity_case_list"
             android:theme="@style/AppTheme.NoActionBar" />

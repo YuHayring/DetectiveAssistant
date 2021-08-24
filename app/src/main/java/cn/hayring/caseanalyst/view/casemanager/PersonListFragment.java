@@ -1,23 +1,22 @@
 package cn.hayring.caseanalyst.view.casemanager;
 
 import android.content.Intent;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
 import cn.hayring.caseanalyst.R;
-import cn.hayring.caseanalyst.view.magic.PersonGraphV2;
-import cn.hayring.caseanalyst.view.casemanager.casevaluesetter.PersonValueSetter;
 import cn.hayring.caseanalyst.domain.Person;
 import cn.hayring.caseanalyst.utils.Pointer;
 import cn.hayring.caseanalyst.view.MyListFragment;
+import cn.hayring.caseanalyst.view.casemanager.casevaluesetter.PersonValueSetter;
+import cn.hayring.caseanalyst.view.magic.PersonGraphV3;
 
 public class PersonListFragment extends MyListFragment<Person> {
 
@@ -59,7 +58,7 @@ public class PersonListFragment extends MyListFragment<Person> {
         //设置人物数据
         Pointer.setPoint(mainActivity.getCaseInstance());
         //绘制关系图
-        startActivity(new Intent(mainActivity, PersonGraphV2.class));
+        startActivity(new Intent(mainActivity, PersonGraphV3.class));
         return super.onOptionsItemSelected(item);
     }
 

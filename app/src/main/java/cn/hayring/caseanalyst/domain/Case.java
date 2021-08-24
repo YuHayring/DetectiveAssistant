@@ -3,6 +3,8 @@ package cn.hayring.caseanalyst.domain;
 
 import java.util.ArrayList;
 
+import cn.hayring.caseanalyst.CaseAnalystApplication;
+
 /***
  * 案件
  * @author Hayring
@@ -51,13 +53,15 @@ public class Case implements Listable {
     boolean isShortTimeCase = true;
 
     public Case() {
-//        organizations = new ArrayList<Organization>();
-//        persons = new ArrayList<Person>();
-//        evidences = new ArrayList<Evidence>();
-//        events = new ArrayList<Event>();
-//
-//        //-------------
-//        nonOrgPersons = new ArrayList<Person>();
+        if (!CaseAnalystApplication.getInstance().isNeo4j()) {
+            organizations = new ArrayList<Organization>();
+            persons = new ArrayList<Person>();
+            evidences = new ArrayList<Evidence>();
+            events = new ArrayList<Event>();
+
+            //-------------
+            nonOrgPersons = new ArrayList<Person>();
+        }
     }
 
     public Case(String name, String info) {
