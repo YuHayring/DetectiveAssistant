@@ -9,8 +9,16 @@ import androidx.lifecycle.ViewModel;
 import java.util.Collections;
 import java.util.List;
 
+import cn.hayring.caseanalyst.CaseAnalystApplication;
 import cn.hayring.caseanalyst.domain.Case;
-import cn.hayring.caseanalyst.viewmodel.AsyncCallBack;
+import cn.hayring.caseanalyst.net.NetworkInterface;
+import es.dmoral.toasty.Toasty;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author hayring
@@ -24,7 +32,7 @@ public class CaseViewModel extends ViewModel {
     /**
      * model 层单例
      */
-    CaseRepository caseModel = CaseModel.getInstance();
+//    CaseRepository caseModel = CaseModel.getInstance();
 
     /**
      * 带有案件列表的 livedata
@@ -37,46 +45,72 @@ public class CaseViewModel extends ViewModel {
     MutableLiveData<Case> singleCase = new MutableLiveData<>();
 
     /**
-     * 上一次插入的自增 id
+     * 系统生成的案件结点id
      */
-    MutableLiveData<Long> autoincrementId = new MutableLiveData<>();
+    MutableLiveData<Case> newCase = new MutableLiveData<>();
+
+    /**
+     * 删除案件反馈
+     */
+    MutableLiveData<Boolean> deleteResponse = new MutableLiveData<>();
+
+    /**
+     * 更新案件反馈
+     */
+    MutableLiveData<Boolean> updateResponse = new MutableLiveData<>();
 
 
     /**
      * 获取案件列表
      */
     public void getCaseList() {
-//        List<Case> cases = caseModel.getCases();
-//        caseListData.postValue(cases);
-        caseModel.getCases(getCaseListCallback);
-    }
+        NetworkInterface.caseApi.getCaseList()
+                //反转顺序
+                .map(new Function<List<Case>, List<Case>>() {
+                    @Override
+                    public List<Case> apply(@NonNull List<Case> cases) throws Exception {
+                        //反转使最新的在下面
+                        Collections.reverse(cases);
+                        return cases;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<List<Case>>() {
 
-    private final AsyncCallBack<List<Case>> getCaseListCallback = new AsyncCallBack<List<Case>>() {
-        @Override
-        public void callBack(List<Case> cases) {
-            //反转使最新的在下面
-            Collections.reverse(cases);
-            caseListData.postValue(cases);
-        }
-    };
+                    @Override
+                    public void onNext(@NonNull List<Case> cases) {
+                        caseListData.setValue(cases);
+                    }
+
+                });
+
+    }
+//
+//    private final AsyncCallBack<List<Case>> getCaseListCallback = new AsyncCallBack<List<Case>>() {
+//        @Override
+//        public void callBack(List<Case> cases) {
+//            caseListData.postValue(cases);
+//        }
+//    };
 
 
     /**
      * 删除案件
      *
-     * @param id 案件 id
+     * @param caseId 案件 id
      */
-    public void deleteCase(Long id) {
-        caseModel.deleteCase(id, deleteCaseListCallback);
+    public void deleteCase(Long caseId) {
+        NetworkInterface.caseApi.deleteCase(caseId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<Boolean>() {
+                    @Override
+                    public void onNext(@NonNull Boolean aBoolean) {
+                        deleteResponse.setValue(aBoolean);
+                    }
+                });
     }
-
-
-    private final AsyncCallBack<Boolean> deleteCaseListCallback = new AsyncCallBack<Boolean>() {
-        @Override
-        public void callBack(Boolean bool) {
-            Log.i("delete", bool.toString());
-        }
-    };
 
 
     /**
@@ -85,43 +119,54 @@ public class CaseViewModel extends ViewModel {
      * @param id 案件 id
      */
     public void getCase(Long id) {
-        caseModel.getCase(id, caseAsyncCallBack);
+
     }
 
-    private final AsyncCallBack<Case> caseAsyncCallBack = new AsyncCallBack<Case>() {
-        @Override
-        public void callBack(Case caxe) {
-            Log.i("getCase", caxe.toString());
-        }
-    };
 
-
+    /**
+     * 更新案件
+     *
+     * @param caxe 案件
+     */
     public void updateCase(Case caxe) {
-        caseModel.updateCase(caxe, updateCaseListCallback);
+        NetworkInterface.caseApi.updateCase(caxe)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<Boolean>() {
+                    @Override
+                    public void onNext(@NonNull Boolean aBoolean) {
+                        updateResponse.setValue(aBoolean);
+                    }
+                });
     }
 
-    private final AsyncCallBack<Boolean> updateCaseListCallback = new AsyncCallBack<Boolean>() {
-        @Override
-        public void callBack(Boolean bool) {
-            Log.i("update", bool.toString());
-        }
-    };
 
+    private static final String NEW_CASE_DEFAULT_NAME = "新案件";
 
     public void addCase() {
-        caseModel.addCase(addCaseListCallback);
+        NetworkInterface.caseApi.createNewCase(NEW_CASE_DEFAULT_NAME)
+                .map(new Function<Long, Case>() {
+                    @Override
+                    public Case apply(@NonNull Long id) throws Exception {
+                        Case caxe = new Case();
+                        caxe.setId(id);
+                        caxe.setName(NEW_CASE_DEFAULT_NAME);
+                        return caxe;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<Case>() {
+                    @Override
+                    public void onNext(@NonNull Case caxe) {
+                        newCase.setValue(caxe);
+                    }
+                });
     }
 
-    private final AsyncCallBack<Long> addCaseListCallback = new AsyncCallBack<Long>() {
-        @Override
-        public void callBack(Long id) {
-            autoincrementId.postValue(id);
-        }
-    };
 
-
-    public MutableLiveData<Long> getAutoincrementId() {
-        return autoincrementId;
+    public MutableLiveData<Case> getNewCase() {
+        return newCase;
     }
 
     public LiveData<List<Case>> getCaseListData() {
@@ -130,5 +175,33 @@ public class CaseViewModel extends ViewModel {
 
     public MutableLiveData<Case> getSingleCase() {
         return singleCase;
+    }
+
+    public MutableLiveData<Boolean> getDeleteResponse() {
+        return deleteResponse;
+    }
+
+    public MutableLiveData<Boolean> getUpdateResponse() {
+        return updateResponse;
+    }
+
+    static abstract class MyObserver<T> implements Observer<T> {
+        @Override
+        public void onSubscribe(@NonNull Disposable d) {
+
+        }
+
+
+        @Override
+        public void onError(@NonNull Throwable e) {
+            Toasty.error(CaseAnalystApplication.getInstance().getApplicationContext(), e.getMessage()).show();
+            Log.e(e.toString(), e.getMessage());
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }

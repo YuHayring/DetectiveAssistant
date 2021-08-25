@@ -82,17 +82,17 @@ public class CaseManagerActivity extends AppCompatActivity {
         isCreate = requestInfo.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true);
 
         caseViewModel = new ViewModelProvider(this, videoViewModelFactory).get(CaseViewModel.class);
-        caseViewModel.getAutoincrementId().observe(this, insertIdObserver);
+        caseViewModel.getNewCase().observe(this, insertIdObserver);
 
+
+        initView();
+        initFragment();
         //获取案件数据
         if (!isCreate) {
             caseInstance = (Case) requestInfo.getSerializableExtra(ValueSetter.CASE);
         } else {
-            caseInstance = new Case();
             caseViewModel.addCase();
         }
-        initView();
-        initFragment();
     }
 
     protected void initView() {
@@ -194,11 +194,11 @@ public class CaseManagerActivity extends AppCompatActivity {
         }
     };
 
-    private final Observer<Long> insertIdObserver = new Observer<Long>() {
+    private final Observer<Case> insertIdObserver = new Observer<Case>() {
 
         @Override
-        public void onChanged(@Nullable Long id) {
-            caseInstance.setId(id);
+        public void onChanged(@Nullable Case caxe) {
+            caseInstance = caxe;
         }
     };
 }

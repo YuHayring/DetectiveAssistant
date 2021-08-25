@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import cn.hayring.caseanalyst.R;
-import cn.hayring.caseanalyst.dao.Neo4jRepository;
 
 public class DBNetworkSettingsActivity extends AppCompatActivity {
 
@@ -37,7 +36,7 @@ public class DBNetworkSettingsActivity extends AppCompatActivity {
         @Override
         public void onPause() {
             super.onPause();
-            Neo4jRepository.reloadDriver();
+//            Neo4jRepository.reloadDriver();
         }
     }
 }

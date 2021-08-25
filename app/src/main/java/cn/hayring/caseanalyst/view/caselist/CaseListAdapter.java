@@ -87,6 +87,8 @@ public class CaseListAdapter extends AbstractListAdapter<Case> {
 
     DeleteItemListener deleteItemListener;
 
+    int lastDeleteIndex;
+
     /***
      * 元素删除监听器
      */
@@ -98,10 +100,9 @@ public class CaseListAdapter extends AbstractListAdapter<Case> {
 
         @Override
         protected void delete(int index) {
+            lastDeleteIndex = index;
             long id = items.get(index).getId();
             mActivity.getCaseViewModel().deleteCase(id);
-            items.remove(index);
-            notifyItemChanged(index);
         }
     }
 
@@ -129,10 +130,18 @@ public class CaseListAdapter extends AbstractListAdapter<Case> {
         return new ListableViewHolder(v);
     }
 
-
+    @Deprecated
     public void setItem(int index, Case caxe) {
         items.set(index, caxe);
         notifyItemChanged(index);
+    }
+
+    /**
+     * 确认删除上次尝试删除的元素
+     */
+    public void deleteLastTryDeleteItem() {
+        deleteItem(lastDeleteIndex);
+        lastDeleteIndex = -1;
     }
 
 

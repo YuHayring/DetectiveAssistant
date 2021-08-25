@@ -89,8 +89,7 @@ public class InfoFragment extends Fragment {
     protected void initView(View view) {
         mainActivity = (CaseManagerActivity) getContext();
 
-        caseViewModel = new ViewModelProvider(this, factory).get(CaseViewModel.class);
-        caseViewModel.getSingleCase().observe(getViewLifecycleOwner(), caseObserver);
+        caseViewModel = new ViewModelProvider(getActivity(), factory).get(CaseViewModel.class);
         //关闭旧入口
         view.findViewById(R.id.event_list_enter).setVisibility(View.GONE);
         view.findViewById(R.id.evidence_list_enter).setVisibility(View.GONE);
@@ -105,9 +104,12 @@ public class InfoFragment extends Fragment {
         saveButton.setVisibility(View.INVISIBLE);
         shortTimeCaseSetter = view.findViewById(R.id.short_time_case_switcher);
         //信息显示
-        nameInputer.setText(mainActivity.getCaseInstance().getName());
-        infoInputer.setText(mainActivity.getCaseInstance().getInfo());
-
+        if (mainActivity.getCaseInstance() != null) {
+            nameInputer.setText(mainActivity.getCaseInstance().getName());
+            infoInputer.setText(mainActivity.getCaseInstance().getInfo());
+        } else {
+            caseViewModel.getNewCase().observe(getViewLifecycleOwner(), caseObserver);
+        }
 
     }
 

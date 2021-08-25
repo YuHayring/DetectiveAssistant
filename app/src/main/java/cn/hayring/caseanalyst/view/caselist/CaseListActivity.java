@@ -108,6 +108,7 @@ public class CaseListActivity extends MyListActivity<Case> {
 
         caseViewModel = new ViewModelProvider(this, factory).get(CaseViewModel.class);
         caseViewModel.getCaseListData().observe(this, caseListObserver);
+        caseViewModel.getDeleteResponse().observe(this, caseDeletedObserver);
         caseViewModel.getCaseList();
     }
 
@@ -135,9 +136,9 @@ public class CaseListActivity extends MyListActivity<Case> {
         @Override
         public void onChanged(Boolean success) {
             if (success) {
-
+                ((CaseListAdapter) mainItemListAdapter).deleteLastTryDeleteItem();
             } else {
-
+                Toasty.error(CaseListActivity.this, "删除失败，还有其他关系存在！").show();
             }
         }
     };
@@ -146,16 +147,7 @@ public class CaseListActivity extends MyListActivity<Case> {
         return caseViewModel;
     }
 
-    /***
-     * 编辑完成调用
-     * @author Hayring
-     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent itemTransporter) {
-//        super.onActivityResult(requestCode, resultCode, itemTransporter);
-//        caseViewModel.getCaseList();
-//
-//    }
+
 
 //    @Override
 //    protected void onStart() {
@@ -179,18 +171,22 @@ public class CaseListActivity extends MyListActivity<Case> {
         return true;
     }
 
-
+    /***
+     * 编辑完成调用
+     * @author Hayring
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent itemTransporter) {
         super.onActivityResult(requestCode, resultCode, itemTransporter);
 
         Case caxe = (Case) itemTransporter.getSerializableExtra(ValueSetter.CASE);
-        if (itemTransporter.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true)) {
-            mainItemListAdapter.addItem(caxe);
-        } else {
-            int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
-            mainItemListAdapter.setItem(index, caxe);
-        }
+//        if (itemTransporter.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true)) {
+//            mainItemListAdapter.addItem(caxe);
+//        } else {
+//            int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
+//            mainItemListAdapter.setItem(index, caxe);
+//        }
+        caseViewModel.getCaseList();
 
     }
 }

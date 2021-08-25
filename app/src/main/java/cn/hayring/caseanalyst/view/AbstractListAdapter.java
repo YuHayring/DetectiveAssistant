@@ -58,6 +58,7 @@ public abstract class AbstractListAdapter<T extends Listable> extends RecyclerVi
 
         //缩减并绑定信息绑定
         String info = items.get(position).getInfo();
+        if (info == null) info = "";
         if (info.length() > INFO_CHAR_LENGTH) {
             info = info.substring(0, INFO_CHAR_LENGTH - 2) + "...";
         }
