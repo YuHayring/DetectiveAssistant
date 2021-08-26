@@ -97,18 +97,26 @@
     <string name="title_activity_d_b_network_settings">设置</string>
 
     <string name="neo4j_setting_header">Neo4j 数据库设置</string>
-    <string name="neo4j_setting_domain">域名/ip</string>
-    <string name="neo4j_setting_port">端口</string>
+    <string name="neo4j_setting_url">URL</string>
     <string name="neo4j_setting_username">用户名</string>
     <string name="neo4j_setting_password">密码</string>
 
     <string name="splash_neo4j_instructions_title">neo4j使用说明</string>
     <string name="splash_neo4j_instructions">neo4j是一种存储图数据的数据库，由于neo4j无法在android上运行，请自行搭建neo4j数据库，并在接下来填写http的地址。否则本应用程序无法使用。</string>
 
+    <!-- Dialog 常见的按钮 -->
+    <string name="dialog_normal_button_cancle">取消</string>
+    <string name="dialog_normal_button_comfirm">确定</string>
+    <string name="dialog_normal_button_yes">是</string>
+    <string name="dialog_normal_button_no">否</string>
 
     <string name="splash_neo4j_input_dialog_url">地址</string>
     <string name="splash_neo4j_input_dialog_username">用户名</string>
     <string name="splash_neo4j_input_dialog_password">密码</string>
     <string name="splash_neo4j_input_dialog_title">请输入neo4j数据库信息</string>
+
+
+    <string name="case_manager_activity_update_false_dialog_title">更新失败</string>
+    <string name="case_manager_activity_update_false_dialog_text">更新失败，是否重新尝试更新？</string>
 
 </resources>

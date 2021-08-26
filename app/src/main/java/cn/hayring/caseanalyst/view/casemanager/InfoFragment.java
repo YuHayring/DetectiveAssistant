@@ -103,6 +103,7 @@ public class InfoFragment extends Fragment {
         saveButton = view.findViewById(R.id.case_save_button);
         saveButton.setVisibility(View.INVISIBLE);
         shortTimeCaseSetter = view.findViewById(R.id.short_time_case_switcher);
+        shortTimeCaseSetter.setVisibility(View.INVISIBLE);
         //信息显示
         if (mainActivity.getCaseInstance() != null) {
             nameInputer.setText(mainActivity.getCaseInstance().getName());
@@ -136,6 +137,9 @@ public class InfoFragment extends Fragment {
     }
 
 
+    /**
+     * 案件变更观察者
+     */
     private final Observer<Case> caseObserver = new Observer<Case>() {
 
         @Override

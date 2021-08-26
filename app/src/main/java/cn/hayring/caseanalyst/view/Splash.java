@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -118,10 +119,6 @@ public class Splash extends AppCompatActivity {
         }
     };
 
-    /**
-     * neo4j设置的key
-     */
-    private static final String NEO4J_SP_NAME = "neo4j";
 
     /**
      * neo4j使用说明是否阅读
@@ -138,7 +135,7 @@ public class Splash extends AppCompatActivity {
      * 选择了neo4j方案的处理流程
      */
     private void neo4jSelected() {
-        SharedPreferences neo4jsp = getSharedPreferences(NEO4J_SP_NAME, MODE_PRIVATE);
+        SharedPreferences neo4jsp = PreferenceManager.getDefaultSharedPreferences(getApplication());
         //neo4j使用方案未阅读
         if (neo4jsp.getInt(NEO4j_SP_READED_VERSION_KEY, 0) < NEO4J_INSTRUCTION_CURRENT_VERSION) {
             final AlertDialog.Builder instructionDialog =
@@ -164,7 +161,7 @@ public class Splash extends AppCompatActivity {
      * neo4j 初始化
      */
     private void neo4jInit() {
-        SharedPreferences neo4jsp = getSharedPreferences(NEO4J_SP_NAME, MODE_PRIVATE);
+        SharedPreferences neo4jsp = PreferenceManager.getDefaultSharedPreferences(getApplication());
         if (!(neo4jsp.contains(NEO4J_SP_URL_KEY) &&
                 neo4jsp.contains(NEO4J_SP_USERNAME_KEY) &&
                 neo4jsp.contains(NEO4J_SP_PASSWORD_KEY)
@@ -176,7 +173,8 @@ public class Splash extends AppCompatActivity {
     }
 
     private void showNeo4jInputDialog() {
-        SharedPreferences neo4jsp = getSharedPreferences(NEO4J_SP_NAME, MODE_PRIVATE);
+        SharedPreferences neo4jsp = PreferenceManager.getDefaultSharedPreferences(getApplication());
+
         LayoutInflater factory = LayoutInflater.from(this);
         final View neo4jInputView = factory.inflate(R.layout.splash_neo4j_input_dialog, null);
         final EditText urlInput = neo4jInputView.findViewById(R.id.url_input);

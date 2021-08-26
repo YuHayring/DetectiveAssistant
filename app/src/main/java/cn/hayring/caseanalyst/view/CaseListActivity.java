@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import cn.hayring.caseanalyst.view.casemanager.old.CaseValueSetter;
 /***
  * 案件列表活动
  */
+@Deprecated
 public class CaseListActivity extends MyListActivity<Case> {
 
     @Override

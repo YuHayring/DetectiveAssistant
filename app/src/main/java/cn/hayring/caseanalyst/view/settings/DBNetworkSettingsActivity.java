@@ -33,10 +33,6 @@ public class DBNetworkSettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
         }
 
-        @Override
-        public void onPause() {
-            super.onPause();
-//            Neo4jRepository.reloadDriver();
-        }
+
     }
 }

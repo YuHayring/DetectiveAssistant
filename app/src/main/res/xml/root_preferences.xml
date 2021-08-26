@@ -3,21 +3,19 @@
     <PreferenceCategory app:title="@string/neo4j_setting_header">
 
         <EditTextPreference
-            app:key="domain"
-            app:title="@string/neo4j_setting_domain"
-            app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
-            app:key="port"
-            app:title="@string/neo4j_setting_port"
-            app:defaultValue="7687"
+            app:key="url"
+            app:title="@string/neo4j_setting_url"
+            app:defaultValue="https://press_your_host_here:7473"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             app:key="username"
             app:title="@string/neo4j_setting_username"
+            app:defaultValue="neo4j"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             app:key="password"
             app:title="@string/neo4j_setting_password"
+            app:defaultValue="1232456"
             app:useSimpleSummaryProvider="true" />
 
 

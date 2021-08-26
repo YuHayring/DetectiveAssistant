@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.hayring.caseanalyst.R;
 import cn.hayring.caseanalyst.databinding.ActivityListBinding;
 import cn.hayring.caseanalyst.domain.Case;
+import cn.hayring.caseanalyst.net.NetworkInterface;
 import cn.hayring.caseanalyst.view.MyListActivity;
 import cn.hayring.caseanalyst.view.ValueSetter;
 import cn.hayring.caseanalyst.view.casemanager.CaseManagerActivity;
@@ -41,6 +43,11 @@ public class CaseListActivity extends MyListActivity<Case> {
 
     CaseViewModel caseViewModel;
 
+    /**
+     * 数据库设置请求代码
+     */
+    public static final int DB_SETTING_REQUEST_CODE = 5;
+
 
     @Override
     public Class<Case> getTClass() {
@@ -52,6 +59,11 @@ public class CaseListActivity extends MyListActivity<Case> {
         return R.layout.single_background_frame;
     }
 
+    /**
+     * 设置编辑案件的activity
+     *
+     * @return {@link CaseManagerActivity}.class
+     */
     @Override
     public Class getValueSetterClass() {
         return CaseManagerActivity.class;
@@ -118,20 +130,24 @@ public class CaseListActivity extends MyListActivity<Case> {
             if (cases == null) {
                 Log.i("CaseListObserver", "cases is null");
                 Toasty.error(CaseListActivity.this, "网络错误").show();
+                cases = Collections.emptyList();
             } else {
                 if (cases.size() == 0) {
                     Log.i("CaseListObserver", "cases is empty");
                     Toasty.info(CaseListActivity.this, "没有结果").show();
                 } else {
                     Log.i("CaseListObserver", "cases contain objects");
-                    mainItemListAdapter.deleteAll();
-                    mainItemListAdapter.addAllItem(cases);
                 }
             }
+            mainItemListAdapter.deleteAll();
+            mainItemListAdapter.addAllItem(cases);
 
         }
     };
 
+    /**
+     * 案件删除观察者
+     */
     private final Observer<Boolean> caseDeletedObserver = new Observer<Boolean>() {
         @Override
         public void onChanged(Boolean success) {
@@ -154,6 +170,8 @@ public class CaseListActivity extends MyListActivity<Case> {
 //        super.onStart();
 //        caseViewModel.getCaseList();
 //    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add("数据库设置");
@@ -167,7 +185,7 @@ public class CaseListActivity extends MyListActivity<Case> {
     public boolean onOptionsItemSelected(MenuItem item) {
 //        if (item.getTitle() ==)
         Intent intent = new Intent(this, DBNetworkSettingsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, DB_SETTING_REQUEST_CODE);
         return true;
     }
 
@@ -177,16 +195,21 @@ public class CaseListActivity extends MyListActivity<Case> {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent itemTransporter) {
+
+        if (requestCode == DB_SETTING_REQUEST_CODE) {
+            NetworkInterface.init();
+            caseViewModel.getCaseList();
+            return;
+        }
         super.onActivityResult(requestCode, resultCode, itemTransporter);
-
         Case caxe = (Case) itemTransporter.getSerializableExtra(ValueSetter.CASE);
-//        if (itemTransporter.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true)) {
-//            mainItemListAdapter.addItem(caxe);
-//        } else {
-//            int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
-//            mainItemListAdapter.setItem(index, caxe);
-//        }
-        caseViewModel.getCaseList();
-
+        if (itemTransporter.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true)) {
+            mainItemListAdapter.addItem(caxe);
+        } else {
+            int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
+            mainItemListAdapter.setItem(index, caxe);
+        }
+//        caseViewModel.getCaseList();
     }
+
 }

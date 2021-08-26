@@ -1,11 +1,13 @@
 package cn.hayring.caseanalyst.view.casemanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -83,10 +85,30 @@ public class CaseManagerActivity extends AppCompatActivity {
 
         caseViewModel = new ViewModelProvider(this, videoViewModelFactory).get(CaseViewModel.class);
         caseViewModel.getNewCase().observe(this, insertIdObserver);
+        caseViewModel.getUpdateResponse().observe(this, updateCaseObserver);
 
 
         initView();
         initFragment();
+
+        //更新失败弹窗
+        updateFailedDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.case_manager_activity_update_false_dialog_title)
+                .setMessage(R.string.case_manager_activity_update_false_dialog_text)
+                .setPositiveButton(R.string.dialog_normal_button_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        caseViewModel.updateCase(caseInstance);
+                    }
+                })
+                .setNegativeButton(R.string.dialog_normal_button_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //更新失败，直接，结束activity
+                        CaseManagerActivity.super.onBackPressed();
+                    }
+                });
+
         //获取案件数据
         if (!isCreate) {
             caseInstance = (Case) requestInfo.getSerializableExtra(ValueSetter.CASE);
@@ -158,23 +180,7 @@ public class CaseManagerActivity extends AppCompatActivity {
         isSaved = saved;
     }
 
-    @Override
-    public void finish() {
-//        if (isCreate) {
-//            requestInfo.putExtra(ValueSetter.CHANGED, isSaved);
-//            if (isSaved) {
-//                Pointer.setPoint(caseInstance);
-//            }
-//        } else {
-//            if (info.isAdded()) {
-//                ((InfoSetterFragment) info).writeInstance();
-//            }
-//        }
-        ((InfoFragment) info).writeInstance();
-        requestInfo.putExtra(ValueSetter.CASE, caseInstance);
-        setResult(2, requestInfo);
-        super.finish();
-    }
+
 
 
     ViewModelProvider.Factory videoViewModelFactory = new ViewModelProvider.Factory() {
@@ -194,6 +200,9 @@ public class CaseManagerActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 创建新案件观察者
+     */
     private final Observer<Case> insertIdObserver = new Observer<Case>() {
 
         @Override
@@ -201,4 +210,40 @@ public class CaseManagerActivity extends AppCompatActivity {
             caseInstance = caxe;
         }
     };
+
+    /**
+     * 更新案件观察者
+     */
+    private final Observer<Boolean> updateCaseObserver = new Observer<Boolean>() {
+
+        @Override
+        public void onChanged(@Nullable Boolean success) {
+            if (success) {
+                requestInfo.putExtra(ValueSetter.CASE, caseInstance);
+                setResult(2, requestInfo);
+                CaseManagerActivity.super.finish();
+            } else {
+                updateFailedDialog.show();
+            }
+        }
+    };
+
+
+    /**
+     * 拦截返回键方法，保存案件信息
+     */
+    @Override
+    public void onBackPressed() {
+        //保存案件信息
+        ((InfoFragment) info).setCaseValue();
+        caseViewModel.updateCase(caseInstance);
+    }
+
+
+    /**
+     * 更新失败弹窗
+     */
+    AlertDialog.Builder updateFailedDialog;
+
+
 }

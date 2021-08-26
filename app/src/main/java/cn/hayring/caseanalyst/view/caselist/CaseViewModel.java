@@ -83,6 +83,11 @@ public class CaseViewModel extends ViewModel {
                         caseListData.setValue(cases);
                     }
 
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        super.onError(e);
+                        caseListData.setValue(null);
+                    }
                 });
 
     }

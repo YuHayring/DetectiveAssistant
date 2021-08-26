@@ -1,8 +1,9 @@
 package cn.hayring.caseanalyst.net;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.gson.GsonBuilder;
 
@@ -57,7 +58,6 @@ public class NetworkInterface {
     /**
      * neo4j设置的key
      */
-    private static final String NEO4J_SP_NAME = "neo4j";
 
     public static final String NEO4J_SP_URL_KEY = "url";
     public static final String NEO4J_SP_USERNAME_KEY = "username";
@@ -71,7 +71,7 @@ public class NetworkInterface {
         synchronized (NetworkInterface.class) {
 //                if (okHttpClient == null && retrofit == null && neo4jApi == null) {
 
-            SharedPreferences neo4jsp = CaseAnalystApplication.getInstance().getSharedPreferences(NEO4J_SP_NAME, Context.MODE_PRIVATE);
+            SharedPreferences neo4jsp = PreferenceManager.getDefaultSharedPreferences(CaseAnalystApplication.getInstance());
             String baseUrl = neo4jsp.getString(NEO4J_SP_URL_KEY, "");
             String username = neo4jsp.getString(NEO4J_SP_USERNAME_KEY, "");
             String password = neo4jsp.getString(NEO4J_SP_PASSWORD_KEY, "");
