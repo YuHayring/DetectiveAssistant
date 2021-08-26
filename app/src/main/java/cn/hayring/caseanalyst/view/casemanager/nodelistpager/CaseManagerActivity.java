@@ -1,4 +1,4 @@
-package cn.hayring.caseanalyst.view.casemanager;
+package cn.hayring.caseanalyst.view.casemanager.nodelistpager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,18 +10,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.lang.reflect.Constructor;
 
 import cn.hayring.caseanalyst.R;
 import cn.hayring.caseanalyst.domain.Case;
 import cn.hayring.caseanalyst.view.ValueSetter;
 import cn.hayring.caseanalyst.view.caselist.CaseViewModel;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.EventListFragment;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.PersonListFragment;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.PlaceListFragmengt;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.ThingListFragment;
 
 public class CaseManagerActivity extends AppCompatActivity {
 
@@ -30,8 +32,8 @@ public class CaseManagerActivity extends AppCompatActivity {
      */
     protected Fragment persons;
     protected Fragment events;
-    protected Fragment evidences;
-    protected Fragment organizations;
+    protected Fragment things;
+    protected Fragment places;
     protected Fragment info;
     protected Fragment lastFragment;
 
@@ -57,19 +59,19 @@ public class CaseManagerActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.person_list:
-//                    switchFragment(persons);
+                    switchFragment(persons);
                     return true;
                 case R.id.event_list:
-//                    switchFragment(events);
+                    switchFragment(events);
                     return true;
-                case R.id.evidence_list:
-//                    switchFragment(evidences);
+                case R.id.thing_list:
+                    switchFragment(things);
                     return true;
-                case R.id.org_list:
-//                    switchFragment(organizations);
+                case R.id.place_list:
+                    switchFragment(places);
                     return true;
                 case R.id.info_settings:
-//                    switchFragment(info);
+                    switchFragment(info);
                     return true;
             }
             return false;
@@ -79,17 +81,15 @@ public class CaseManagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_case_manager);
         requestInfo = getIntent();
         isCreate = requestInfo.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true);
 
-        caseViewModel = new ViewModelProvider(this, videoViewModelFactory).get(CaseViewModel.class);
+        caseViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CaseViewModel.class);
         caseViewModel.getNewCase().observe(this, insertIdObserver);
         caseViewModel.getUpdateResponse().observe(this, updateCaseObserver);
 
 
-        initView();
-        initFragment();
 
         //更新失败弹窗
         updateFailedDialog = new AlertDialog.Builder(this)
@@ -115,6 +115,8 @@ public class CaseManagerActivity extends AppCompatActivity {
         } else {
             caseViewModel.addCase();
         }
+        initView();
+        initFragment();
     }
 
     protected void initView() {
@@ -123,19 +125,19 @@ public class CaseManagerActivity extends AppCompatActivity {
 
     private void initFragment() {
 
-//        persons = new PersonListFragment();
-//        events = new EventListFragment();
-//        evidences = new EvidenceListFragment();
-//        organizations = new OrgListFragment();
+        persons = new PersonListFragment();
+        events = new EventListFragment();
+        things = new ThingListFragment();
+        places = new PlaceListFragmengt();
         info = new InfoFragment();
-//        if (isCreate) {
-        lastFragment = info;
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainview, info).show(info).commit();
-        bottomNavigationView.setSelectedItemId(R.id.info_settings);
-//        } else {
-//            lastFragment = persons;
-//            getSupportFragmentManager().beginTransaction().replace(R.id.mainview, persons).show(persons).commitNow();
-//        }
+        if (isCreate) {
+            lastFragment = info;
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainview, info).show(info).commit();
+            bottomNavigationView.setSelectedItemId(R.id.info_settings);
+        } else {
+            lastFragment = persons;
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainview, persons).show(persons).commitNow();
+        }
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -143,20 +145,20 @@ public class CaseManagerActivity extends AppCompatActivity {
 
     }
 
-//
-//    private void switchFragment(Fragment nextfragment) {
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.hide(lastFragment);//隐藏上个Fragment
-//        if (nextfragment.isAdded() == false) {
-//            transaction.add(R.id.mainview, nextfragment);
-//
-//
-//        }
-//
-//        transaction.show(nextfragment).commitAllowingStateLoss();
-//
-//        lastFragment = nextfragment;
-//    }
+
+    private void switchFragment(Fragment nextfragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.hide(lastFragment);//隐藏上个Fragment
+        if (nextfragment.isAdded() == false) {
+            transaction.add(R.id.mainview, nextfragment);
+
+
+        }
+
+        transaction.show(nextfragment).commitAllowingStateLoss();
+
+        lastFragment = nextfragment;
+    }
 
 
     public Case getCaseInstance() {
@@ -183,22 +185,6 @@ public class CaseManagerActivity extends AppCompatActivity {
 
 
 
-    ViewModelProvider.Factory videoViewModelFactory = new ViewModelProvider.Factory() {
-
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            try {
-                Constructor constructor = modelClass.getConstructor();
-                return (T) constructor.newInstance();
-            } catch (Exception e) {
-                IllegalArgumentException ile = new IllegalArgumentException("" + modelClass + "is not" + CaseViewModel.class);
-                ile.initCause(e);
-                throw ile;
-            }
-
-        }
-    };
 
     /**
      * 创建新案件观察者

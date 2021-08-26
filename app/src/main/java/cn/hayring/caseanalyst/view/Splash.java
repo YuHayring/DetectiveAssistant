@@ -180,11 +180,11 @@ public class Splash extends AppCompatActivity {
         final EditText urlInput = neo4jInputView.findViewById(R.id.url_input);
         final EditText usernameInput = neo4jInputView.findViewById(R.id.username_input);
         final EditText passwordInput = neo4jInputView.findViewById(R.id.password_input);
-        String baseUrl = neo4jsp.getString(NEO4J_SP_URL_KEY, "");
+        String baseUrl = neo4jsp.getString(NEO4J_SP_URL_KEY, "https://press_your_host_here:7473");
         urlInput.setText(baseUrl);
-        String username = neo4jsp.getString(NEO4J_SP_USERNAME_KEY, "");
+        String username = neo4jsp.getString(NEO4J_SP_USERNAME_KEY, "neo4j");
         usernameInput.setText(username);
-        String password = neo4jsp.getString(NEO4J_SP_PASSWORD_KEY, "");
+        String password = neo4jsp.getString(NEO4J_SP_PASSWORD_KEY, "neo4j");
         passwordInput.setText(password);
         AlertDialog.Builder neo4jInputDialog = new AlertDialog.Builder(this);
         neo4jInputDialog.setTitle(R.string.splash_neo4j_input_dialog_title);

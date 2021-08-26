@@ -62,7 +62,8 @@ public abstract class AbstractListAdapter<T extends Listable> extends RecyclerVi
         if (info.length() > INFO_CHAR_LENGTH) {
             info = info.substring(0, INFO_CHAR_LENGTH - 2) + "...";
         }
-        holder.info.setText(info);
+        //TODO
+        if (holder.info != null) holder.info.setText(info);
 
         //注册点击监听器
         bindListener(holder);

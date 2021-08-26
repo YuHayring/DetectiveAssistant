@@ -1,6 +1,8 @@
 package cn.hayring.caseanalyst.domain;
 
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 
 import cn.hayring.caseanalyst.CaseAnalystApplication;
@@ -20,11 +22,13 @@ public class Case implements Listable {
     /***
      * 名字
      */
+    @Expose
     protected String name;
 
     /***
      * 案件信息
      */
+    @Expose
     protected String info;
 
     /***

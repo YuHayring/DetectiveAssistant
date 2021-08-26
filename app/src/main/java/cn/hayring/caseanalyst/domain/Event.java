@@ -1,12 +1,14 @@
 package cn.hayring.caseanalyst.domain;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 
 /***
  * 事件
  * @author Hayring
  */
-public class Event implements Relationable {
+public class Event implements Relationable, Listable {
 
     /**
      * id
@@ -16,6 +18,7 @@ public class Event implements Relationable {
     /***
      * 事件名称
      */
+    @Expose
     protected String name;
 
     /***
@@ -41,6 +44,7 @@ public class Event implements Relationable {
     /***
      * 事件信息
      */
+    @Expose
     protected String info;
 
     /***
@@ -67,7 +71,7 @@ public class Event implements Relationable {
     /***
      * 保护构造器，初始化各种集合
      */
-    protected Event() {
+    public Event() {
         manEventRelationships = new ArrayList<Relationship<Person, Event>>();
         orgEventRelationships = new ArrayList<Relationship<Organization, Event>>();
         //manThingRelationships = new ArrayList<Relationship<Person, Evidence>>();

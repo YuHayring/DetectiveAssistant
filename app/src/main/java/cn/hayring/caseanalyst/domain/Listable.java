@@ -13,4 +13,6 @@ public interface Listable extends Serializable {
     String getInfo();
 
     Long getId();
+
+    void setId(Long id);
 }

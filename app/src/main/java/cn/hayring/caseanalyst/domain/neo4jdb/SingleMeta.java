@@ -1,5 +1,7 @@
 package cn.hayring.caseanalyst.domain.neo4jdb;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * @author Hayring
  * @date 2021/8/25
@@ -9,15 +11,19 @@ public class SingleMeta {
     /**
      * id
      */
+    @Expose
     private Long id;
 
     /**
      * 类型（结点或边）
      */
+    @Expose
     private String type;
 
 
+    @Expose
     private Boolean deleted;
+
 
     public Long getId() {
         return id;

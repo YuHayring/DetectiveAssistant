@@ -1,5 +1,7 @@
 package cn.hayring.caseanalyst.domain.neo4jdb;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * @author Hayring
  * @date 2021/8/25
@@ -10,11 +12,13 @@ public class Result<T> {
     /**
      * 结点信息集合
      */
+    @Expose
     T[] row;
 
     /**
      * 结点元数据集合
      */
+    @Expose
     SingleMeta[] meta;
 
     public T[] getRow() {

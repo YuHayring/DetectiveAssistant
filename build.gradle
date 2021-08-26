@@ -1,6 +1,8 @@
 
 buildscript {
 
+    ext.kotlin_version = "1.5.10"
+    ext.kotlin_coroutines = "1.5.1"
     repositories {
         maven {
             url 'http://maven.aliyun.com/nexus/content/groups/public/'
@@ -14,6 +16,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         
 
         // NOTE: Do not place your application dependencies here; they belong

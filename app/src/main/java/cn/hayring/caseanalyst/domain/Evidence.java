@@ -1,5 +1,7 @@
 package cn.hayring.caseanalyst.domain;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -7,7 +9,7 @@ import java.util.Calendar;
  * 物件，痕迹，证物
  * @author Hayring
  */
-public class Evidence implements Avatars {
+public class Evidence implements Avatars, Listable {
 
     //Todo证物合成
 
@@ -19,6 +21,7 @@ public class Evidence implements Avatars {
     /***
      * 证物名称
      */
+    @Expose
     protected String name;
 
     /***
@@ -54,6 +57,7 @@ public class Evidence implements Avatars {
     /***
      * 证物信息
      */
+    @Expose
     protected String info;
 
     /***

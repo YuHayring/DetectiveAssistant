@@ -5,6 +5,7 @@ import android.util.Base64;
 
 import androidx.preference.PreferenceManager;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,12 @@ import cn.hayring.caseanalyst.dao.CaseApi;
 import cn.hayring.caseanalyst.dao.CaseApiImpl;
 import cn.hayring.caseanalyst.dao.Neo4jDBApi;
 import cn.hayring.caseanalyst.dao.Neo4jResponseAdapter;
+import cn.hayring.caseanalyst.dao.NodeApi;
+import cn.hayring.caseanalyst.dao.NodeApiImpl;
+import cn.hayring.caseanalyst.domain.Event;
+import cn.hayring.caseanalyst.domain.Person;
+import cn.hayring.caseanalyst.domain.Place;
+import cn.hayring.caseanalyst.domain.Thing;
 import cn.hayring.caseanalyst.domain.neo4jdb.SummaryResult;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -63,12 +70,47 @@ public class NetworkInterface {
     public static final String NEO4J_SP_USERNAME_KEY = "username";
     public static final String NEO4J_SP_PASSWORD_KEY = "password";
 
+
+    /**
+     * 单例内部类
+     */
+    private static class Singleton {
+        private static Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(SummaryResult.class, new Neo4jResponseAdapter())
+                .create();
+
+        /**
+         * 人物信息操作对象
+         */
+        private static NodeApi<Person> personApi = new NodeApiImpl<Person>(Person.class);
+
+        /**
+         * 地点信息操作对象
+         */
+        private static NodeApi<Place> placeApi = new NodeApiImpl<Place>(Place.class);
+
+        /**
+         * 事件信息操作对象
+         */
+        private static NodeApi<Event> eventApi = new NodeApiImpl<Event>(Event.class);
+
+        /**
+         * 物品信息操作对象
+         */
+        private static NodeApi<Thing> thingApi = new NodeApiImpl<Thing>(Thing.class);
+
+
+    }
+
     /**
      * 初始化网络请求框架
      */
     public static void init() {
 //        if (okHttpClient == null && retrofit == null && neo4jApi == null) {
         synchronized (NetworkInterface.class) {
+
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 //                if (okHttpClient == null && retrofit == null && neo4jApi == null) {
 
             SharedPreferences neo4jsp = PreferenceManager.getDefaultSharedPreferences(CaseAnalystApplication.getInstance());
@@ -105,8 +147,7 @@ public class NetworkInterface {
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(httpClient)
-                    .addConverterFactory(GsonConverterFactory
-                            .create(new GsonBuilder().registerTypeAdapter(SummaryResult.class, new Neo4jResponseAdapter()).create()))
+                    .addConverterFactory(GsonConverterFactory.create(Singleton.gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
             neo4jApi = retrofit.create(Neo4jDBApi.class);
@@ -114,6 +155,22 @@ public class NetworkInterface {
 //                }
         }
 //        }
+    }
+
+    public static NodeApi<Person> getPersonApi() {
+        return Singleton.personApi;
+    }
+
+    public static NodeApi<Place> getPlaceApi() {
+        return Singleton.placeApi;
+    }
+
+    public static NodeApi<Event> getEventApi() {
+        return Singleton.eventApi;
+    }
+
+    public static NodeApi<Thing> getThingApi() {
+        return Singleton.thingApi;
     }
 
 

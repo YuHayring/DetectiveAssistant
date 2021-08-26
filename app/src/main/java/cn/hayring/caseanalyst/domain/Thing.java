@@ -2,42 +2,30 @@ package cn.hayring.caseanalyst.domain;
 
 import com.google.gson.annotations.Expose;
 
-import java.io.Serializable;
-
-/***
- * 地点
+/**
  * @author Hayring
+ * @date 2021/8/26
+ * @description 代替 {@link Evidence}
  */
-public class Place implements Serializable, Listable {
-
+public class Thing implements Listable {
     /**
      * id
      */
     private Long id;
 
     /***
-     * 地点名称
+     * 证物名称
      */
     @Expose
     protected String name;
 
     /***
-     * 地点描述
+     * 证物信息
      */
     @Expose
     protected String info;
 
 
-    public Place(String name, String info) {
-        this.name = name;
-        this.info = info;
-    }
-
-    public Place() {
-
-    }
-
-    @Override
     public Long getId() {
         return id;
     }
@@ -46,16 +34,10 @@ public class Place implements Serializable, Listable {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
 
     public String getName() {
         return name;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -67,5 +49,10 @@ public class Place implements Serializable, Listable {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

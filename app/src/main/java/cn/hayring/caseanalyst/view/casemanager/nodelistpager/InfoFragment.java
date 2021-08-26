@@ -1,4 +1,4 @@
-package cn.hayring.caseanalyst.view.casemanager;
+package cn.hayring.caseanalyst.view.casemanager.nodelistpager;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -102,6 +102,7 @@ public class InfoFragment extends Fragment {
         infoInputer = view.findViewById(R.id.case_info_inputer);
         saveButton = view.findViewById(R.id.case_save_button);
         saveButton.setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.label_is_short_time_case).setVisibility(View.INVISIBLE);
         shortTimeCaseSetter = view.findViewById(R.id.short_time_case_switcher);
         shortTimeCaseSetter.setVisibility(View.INVISIBLE);
         //信息显示
@@ -124,8 +125,10 @@ public class InfoFragment extends Fragment {
      * 将输入框的值写入内存
      */
     public void setCaseValue() {
-        mainActivity.getCaseInstance().setName(nameInputer.getText().toString());
-        mainActivity.getCaseInstance().setInfo(infoInputer.getText().toString());
+        if (mainActivity != null && nameInputer != null) {
+            mainActivity.getCaseInstance().setName(nameInputer.getText().toString());
+            mainActivity.getCaseInstance().setInfo(infoInputer.getText().toString());
+        }
     }
 
     /***

@@ -3,8 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_case_manager.xml" value="0.10733695652173914" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.10733695652173914" />
         <entry key="app/src/main/res/layout/activity_person_graph_v3.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activitycase_manager.xml" value="0.10733695652173914" />
+        <entry key="app/src/main/res/layout/person_value_setter.xml" value="0.14130434782608695" />
+        <entry key="app/src/main/res/layout/single_event.xml" value="0.10733695652173914" />
+        <entry key="app/src/main/res/layout/single_evidence.xml" value="0.10733695652173914" />
         <entry key="app/src/main/res/layout/splash_neo4j_input.xml" value="0.10099637681159421" />
+        <entry key="app/src/main/res/menu/case_manager_navigation.xml" value="0.19427083333333334" />
+        <entry key="app/src/main/res/menu/navigation.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/xml/network_security_config.xml" value="0.10099637681159421" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
       </map>

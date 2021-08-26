@@ -36,12 +36,12 @@ public class CaseApiImpl implements CaseApi {
     /**
      * Cypher语句：删除案件
      */
-    private static final String CYPHER_CREATE_DELETE_CASE = "MATCH (c) WHERE id(c) = $id DELETE c";
+    private static final String CYPHER_DELETE_CASE = "MATCH (c) WHERE id(c) = $id DELETE c";
 
     /**
      * Cypher语句：更新案件
      */
-    private static final String CYPHER_CREATE_UPDATE_CASE = "MATCH (c) WHERE id(c) = $id SET c.name = $name, c.info = $info";
+    private static final String CYPHER_UPDATE_CASE = "MATCH (c) WHERE id(c) = $id SET c = $case";
 
     /**
      * 一步创建新案件请求
@@ -69,7 +69,7 @@ public class CaseApiImpl implements CaseApi {
     public static BaseRequest createDeleteCaseRequest(Long caseId) {
         BaseRequest request = new BaseRequest();
         Map<String, Object> statements = new HashMap<>();
-        statements.put(BaseRequest.STATEMENT_KEY, CYPHER_CREATE_DELETE_CASE);
+        statements.put(BaseRequest.STATEMENT_KEY, CYPHER_DELETE_CASE);
         Map<String, Long> parameters = Collections.singletonMap(BaseRequest.ID_KEY, caseId);
         statements.put(BaseRequest.PARAMETERS_KEY, parameters);
         request.setStatements(new Map[]{statements});
@@ -86,11 +86,10 @@ public class CaseApiImpl implements CaseApi {
     public static BaseRequest createUpdateCaseRequest(Case caxe) {
         BaseRequest request = new BaseRequest();
         Map<String, Object> statements = new HashMap<>();
-        statements.put(BaseRequest.STATEMENT_KEY, CYPHER_CREATE_UPDATE_CASE);
+        statements.put(BaseRequest.STATEMENT_KEY, CYPHER_UPDATE_CASE);
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(BaseRequest.ID_KEY, caxe.getId());
-        parameters.put(BaseRequest.NAME_KEY, caxe.getName());
-        parameters.put(BaseRequest.INFO_KEY, caxe.getInfo());
+        parameters.put(BaseRequest.CASE_KEY, caxe);
         statements.put(BaseRequest.PARAMETERS_KEY, parameters);
         request.setStatements(new Map[]{statements});
         return request;
@@ -117,9 +116,8 @@ public class CaseApiImpl implements CaseApi {
                                 List<Case> cases = new ArrayList<>(results.size());
                                 for (Result result : results) {
                                     Result<Case> actualResult = (Result<Case>) result;
-                                    Case caxe = new Case();
+                                    Case caxe = actualResult.getRow()[0];
                                     caxe.setId(actualResult.getMeta()[0].getId());
-                                    caxe.setName(actualResult.getRow()[0].getName());
                                     cases.add(caxe);
                                 }
                                 return cases;
@@ -178,7 +176,7 @@ public class CaseApiImpl implements CaseApi {
      *
      * @return baseResult.getErrors().length == 0
      */
-    public static Function ensureNoErrorFunction = new Function<BaseResult, Boolean>() {
+    public static Function<BaseResult, Boolean> ensureNoErrorFunction = new Function<BaseResult, Boolean>() {
         @Override
         public Boolean apply(@NonNull BaseResult baseResult) throws Exception {
             return baseResult.getErrors().length == 0;

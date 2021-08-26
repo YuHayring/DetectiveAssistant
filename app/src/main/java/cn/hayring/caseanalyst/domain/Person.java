@@ -1,12 +1,14 @@
 package cn.hayring.caseanalyst.domain;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 
 /***
  * 案件参与的人
  * @author Hayring
  */
-public class Person implements Avatars {
+public class Person implements Avatars, Listable {
 
     /**
      * id
@@ -16,6 +18,7 @@ public class Person implements Avatars {
     /***
      * 姓名
      */
+    @Expose
     protected String name;
 
     /***
@@ -26,12 +29,23 @@ public class Person implements Avatars {
     /***
      * 年龄
      */
+    @Expose
     protected Integer age;
 
     /***
      * 是否为嫌犯
      */
     protected Boolean suspect;
+
+    /**
+     * neo4j性别
+     */
+    @Expose
+    protected String sex;
+    public static final String SEX_MALE = "male";
+    public static final String SEX_FEMALE = "female";
+
+
     /***
      * 性别
      */
@@ -42,6 +56,7 @@ public class Person implements Avatars {
     /***
      * 血型
      */
+    @Expose
     protected String bloodType;
     public static final String A = "A";
     public static final String AB = "AB";
@@ -62,6 +77,7 @@ public class Person implements Avatars {
     /***
      * 人物描述
      */
+    @Expose
     protected String info;
 
     /***
@@ -129,7 +145,7 @@ public class Person implements Avatars {
     /***
      * 保护构造器，初始化各种集合
      */
-    protected Person() {
+    public Person() {
         manEventRelationships = new ArrayList<Relationship<Person, Event>>();
         manThingRelationships = new ArrayList<Relationship<Person, Evidence>>();
         multipleIdentities = new ArrayList<Person>();

@@ -13,9 +13,9 @@ import java.util.List;
 
 import cn.hayring.caseanalyst.domain.Case;
 import cn.hayring.caseanalyst.domain.Event;
-import cn.hayring.caseanalyst.domain.Evidence;
 import cn.hayring.caseanalyst.domain.Person;
 import cn.hayring.caseanalyst.domain.Place;
+import cn.hayring.caseanalyst.domain.Thing;
 import cn.hayring.caseanalyst.domain.neo4jdb.Result;
 import cn.hayring.caseanalyst.domain.neo4jdb.SummaryResult;
 
@@ -52,7 +52,7 @@ public class Neo4jResponseAdapter implements JsonDeserializer<SummaryResult> {
             }
             break;
             case "t": {
-                actualType = new ParameterizedTypeImpl(Result.class, new Class[]{Evidence.class});
+                actualType = new ParameterizedTypeImpl(Result.class, new Class[]{Thing.class});
             }
             break;
             case "l": {

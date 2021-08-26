@@ -8,14 +8,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +23,7 @@ import cn.hayring.caseanalyst.domain.Case;
 import cn.hayring.caseanalyst.net.NetworkInterface;
 import cn.hayring.caseanalyst.view.MyListActivity;
 import cn.hayring.caseanalyst.view.ValueSetter;
-import cn.hayring.caseanalyst.view.casemanager.CaseManagerActivity;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.CaseManagerActivity;
 import cn.hayring.caseanalyst.view.settings.DBNetworkSettingsActivity;
 import es.dmoral.toasty.Toasty;
 
@@ -80,22 +77,7 @@ public class CaseListActivity extends MyListActivity<Case> {
     }
 
 
-    ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
 
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            try {
-                Constructor constructor = modelClass.getConstructor();
-                return (T) constructor.newInstance();
-            } catch (Exception e) {
-                IllegalArgumentException ile = new IllegalArgumentException("" + modelClass + " is not" + CaseViewModel.class);
-                ile.initCause(e);
-                throw ile;
-            }
-
-        }
-    };
 
 
     /***
@@ -117,8 +99,7 @@ public class CaseListActivity extends MyListActivity<Case> {
 
         viewBinding.contentList.recyclerList.setAdapter(mainItemListAdapter);
 
-
-        caseViewModel = new ViewModelProvider(this, factory).get(CaseViewModel.class);
+        caseViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CaseViewModel.class);
         caseViewModel.getCaseListData().observe(this, caseListObserver);
         caseViewModel.getDeleteResponse().observe(this, caseDeletedObserver);
         caseViewModel.getCaseList();
@@ -209,7 +190,6 @@ public class CaseListActivity extends MyListActivity<Case> {
             int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
             mainItemListAdapter.setItem(index, caxe);
         }
-//        caseViewModel.getCaseList();
     }
 
 }

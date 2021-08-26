@@ -1,5 +1,7 @@
 package cn.hayring.caseanalyst.domain.neo4jdb;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 /**
@@ -11,11 +13,13 @@ public class BaseResult {
     /**
      * 结果集合
      */
+    @Expose
     private List<SummaryResult> results;
 
     /**
      * 错误信息
      */
+    @Expose
     private Object[] errors;
 
 

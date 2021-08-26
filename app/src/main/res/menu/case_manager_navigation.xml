@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/person_list"
+        android:icon="@drawable/person"
+        android:title="@string/person" />
+
+    <item
+        android:id="@+id/event_list"
+        android:icon="@drawable/event"
+        android:title="@string/event" />
+
+    <item
+        android:id="@+id/thing_list"
+        android:icon="@drawable/evidence"
+        android:title="@string/thing" />
+
+    <item
+        android:id="@+id/place_list"
+        android:icon="@drawable/organization"
+        android:title="@string/place" />
+    <item
+        android:id="@+id/info_settings"
+        android:icon="@drawable/info"
+        android:title="@string/info" />
+</menu>

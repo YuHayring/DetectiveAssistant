@@ -1,5 +1,7 @@
 package cn.hayring.caseanalyst.domain.neo4jdb;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 /**
@@ -8,11 +10,13 @@ import java.util.List;
  * @description 查询结果
  */
 public class SummaryResult<T> {
+    @Expose
     private String[] columns;
 
     /**
      * 具体查询结果
      */
+    @Expose
     private List<Result<T>> data;
 
 

@@ -98,7 +98,7 @@
             android:label="@string/title_activity_case_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.casemanager.CaseManagerActivity"
+            android:name=".view.casemanager.nodelistpager.CaseManagerActivity"
             android:label="@string/title_activity_case_list"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
