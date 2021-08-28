@@ -8,6 +8,7 @@ import cn.hayring.caseanalyst.domain.Thing;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.JetpackListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.NodeViewModel;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.ThingViewModel;
+import cn.hayring.caseanalyst.view.casemanager.nodevaluesetter.ThingValueSetter;
 
 public class ThingListFragment extends JetpackListFragment<Thing> {
     @Override
@@ -24,7 +25,7 @@ public class ThingListFragment extends JetpackListFragment<Thing> {
     @Override
     public Class getValueSetterClass() {
         //TODO
-        return null;
+        return ThingValueSetter.class;
     }
 
     @Override

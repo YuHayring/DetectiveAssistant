@@ -28,6 +28,7 @@ import cn.hayring.caseanalyst.domain.Evidence;
 import cn.hayring.caseanalyst.domain.Relationship;
 import cn.hayring.caseanalyst.utils.Pointer;
 
+@Deprecated
 public class EvidenceValueSetter extends ValueSetter<Evidence> {
 
     //标记头像是否改过
@@ -139,7 +140,6 @@ public class EvidenceValueSetter extends ValueSetter<Evidence> {
             //2000-1-1 00:00
             time = new GregorianCalendar(2000, 1, 1, 0, 0);
         }
-
 
 
         //设置监听器

@@ -78,6 +78,10 @@ public abstract class AbstractListAdapter<T extends Listable> extends RecyclerVi
 
     //改变数据源的四个方法
 
+    public void addItemFirst(T item) {
+        items.add(0, item);
+        notifyItemInserted(0);
+    }
 
     public void addItem(T item) {
         items.add(item);

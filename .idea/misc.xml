@@ -7,6 +7,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10733695652173914" />
         <entry key="app/src/main/res/layout/activity_person_graph_v3.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activitycase_manager.xml" value="0.10733695652173914" />
+        <entry key="app/src/main/res/layout/event_value_setter.xml" value="0.10326086956521739" />
+        <entry key="app/src/main/res/layout/node_value_setter_event.xml" value="0.10326086956521739" />
+        <entry key="app/src/main/res/layout/node_value_setter_person.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/node_value_setter_place.xml" value="0.10326086956521739" />
+        <entry key="app/src/main/res/layout/node_value_setter_thing.xml" value="0.10326086956521739" />
         <entry key="app/src/main/res/layout/person_value_setter.xml" value="0.14130434782608695" />
         <entry key="app/src/main/res/layout/single_event.xml" value="0.10733695652173914" />
         <entry key="app/src/main/res/layout/single_evidence.xml" value="0.10733695652173914" />

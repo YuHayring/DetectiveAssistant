@@ -3,6 +3,7 @@
 *.aar
 *.ap_
 *.aab
+.DS_Store
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -87,3 +88,7 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+
+*/.DS_Store
+**/.DS_Store

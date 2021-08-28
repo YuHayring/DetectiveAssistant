@@ -15,7 +15,7 @@ import cn.hayring.caseanalyst.domain.Listable;
 import cn.hayring.caseanalyst.view.AbstractListAdapter;
 import cn.hayring.caseanalyst.view.ListableViewHolder;
 import cn.hayring.caseanalyst.view.MyListActivity;
-import cn.hayring.caseanalyst.view.ValueSetter;
+import cn.hayring.caseanalyst.view.casemanager.nodevaluesetter.NodeValueSetter;
 import cn.hayring.caseanalyst.view.listener.RecyclerItemDeleteDialogListener;
 
 /***
@@ -68,14 +68,14 @@ public class JetpackFragmentListAdapter<T extends Listable> extends AbstractList
             int position = ((RecyclerView) view.getParent()).getChildAdapterPosition(view);
             Listable node = items.get(position);
 
-            //注册Activity，ValueSetter
+            //注册Activity，NodeValueSetter
             Intent itemTransporter = new Intent(fragment.requireContext(), fragment.getValueSetterClass());
             //绑定参数
-            itemTransporter.putExtra(ValueSetter.CREATE_OR_NOT, false);
-            itemTransporter.putExtra(ValueSetter.DATA, node);
-            itemTransporter.putExtra(ValueSetter.INDEX, position);
+            itemTransporter.putExtra(NodeValueSetter.CREATE_OR_NOT, false);
+            itemTransporter.putExtra(NodeValueSetter.INTENT_KEY_NODE, node);
+            itemTransporter.putExtra(NodeValueSetter.INDEX, position);
 
-            //启动ValueSetter
+            //启动NodeValueSetter
             fragment.startActivityForResult(itemTransporter, MyListActivity.REQUEST_CODE);
 
 

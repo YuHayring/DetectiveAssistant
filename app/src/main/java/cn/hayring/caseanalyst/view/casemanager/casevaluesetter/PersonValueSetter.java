@@ -27,6 +27,7 @@ import cn.hayring.caseanalyst.domain.Person;
 import cn.hayring.caseanalyst.domain.Relationship;
 import cn.hayring.caseanalyst.utils.Pointer;
 
+@Deprecated
 public class PersonValueSetter extends ValueSetter<Person> {
 
     //标记头像是否改过
@@ -121,7 +122,6 @@ public class PersonValueSetter extends ValueSetter<Person> {
         manOrgRelationshipEnter.setOnClickListener(relationshipEnterListener);
 
 
-
         //设置监听器
         saveButton.setOnClickListener(new FinishEditListener());
         headImage.setOnClickListener(view -> {
@@ -207,8 +207,6 @@ public class PersonValueSetter extends ValueSetter<Person> {
                 }
             }*/
             image = loadHeadImage(instance, headImage, this);
-
-
 
 
         } else {

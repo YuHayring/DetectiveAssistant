@@ -8,6 +8,7 @@ import cn.hayring.caseanalyst.domain.Place;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.JetpackListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.NodeViewModel;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.PlaceViewModel;
+import cn.hayring.caseanalyst.view.casemanager.nodevaluesetter.PlaceValueSetter;
 
 /**
  * @author Hayring
@@ -27,7 +28,7 @@ public class PlaceListFragmengt extends JetpackListFragment<Place> {
 
     @Override
     public Class getValueSetterClass() {
-        return null;
+        return PlaceValueSetter.class;
     }
 
     @Override

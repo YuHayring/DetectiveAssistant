@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +24,7 @@ import cn.hayring.caseanalyst.domain.Case;
 import cn.hayring.caseanalyst.net.NetworkInterface;
 import cn.hayring.caseanalyst.view.MyListActivity;
 import cn.hayring.caseanalyst.view.ValueSetter;
-import cn.hayring.caseanalyst.view.casemanager.nodelistpager.CaseManagerActivity;
+import cn.hayring.caseanalyst.view.casemanager.CaseManagerActivity;
 import cn.hayring.caseanalyst.view.settings.DBNetworkSettingsActivity;
 import es.dmoral.toasty.Toasty;
 
@@ -88,7 +89,12 @@ public class CaseListActivity extends MyListActivity<Case> {
         //注册
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        viewBinding.addItemButton.setOnClickListener(new CreateNewItemListener());
+        viewBinding.addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                caseViewModel.addCase();
+            }
+        });
         //初始化数据源
         List<Case> items = new ArrayList<Case>();
         //绑定数据源
@@ -102,6 +108,7 @@ public class CaseListActivity extends MyListActivity<Case> {
         caseViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CaseViewModel.class);
         caseViewModel.getCaseListData().observe(this, caseListObserver);
         caseViewModel.getDeleteResponse().observe(this, caseDeletedObserver);
+        caseViewModel.getNewCase().observe(this, caseCreatedObserver);
         caseViewModel.getCaseList();
     }
 
@@ -140,10 +147,32 @@ public class CaseListActivity extends MyListActivity<Case> {
         }
     };
 
+
+    /**
+     * 新增案件观察者
+     */
+    private final Observer<Case> caseCreatedObserver = new Observer<Case>() {
+        @Override
+        public void onChanged(Case caxe) {
+            mainItemListAdapter.addItemFirst(caxe);
+            viewBinding.contentList.recyclerList.scrollToPosition(0);
+
+            //注册Activity，ValueSetter
+            Intent itemTransporter = new Intent(CaseListActivity.this, getValueSetterClass());
+            //绑定参数
+            itemTransporter.putExtra(ValueSetter.CREATE_OR_NOT, true);
+            itemTransporter.putExtra(ValueSetter.CASE, caxe);
+            itemTransporter.putExtra(ValueSetter.INDEX, 0);
+
+            //启动ValueSetter
+            startActivityForResult(itemTransporter, MyListActivity.REQUEST_CODE);
+
+        }
+    };
+
     public CaseViewModel getCaseViewModel() {
         return caseViewModel;
     }
-
 
 
 //    @Override
@@ -184,12 +213,8 @@ public class CaseListActivity extends MyListActivity<Case> {
         }
         super.onActivityResult(requestCode, resultCode, itemTransporter);
         Case caxe = (Case) itemTransporter.getSerializableExtra(ValueSetter.CASE);
-        if (itemTransporter.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true)) {
-            mainItemListAdapter.addItem(caxe);
-        } else {
-            int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
-            mainItemListAdapter.setItem(index, caxe);
-        }
+        int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
+        mainItemListAdapter.setItem(index, caxe);
     }
 
 }

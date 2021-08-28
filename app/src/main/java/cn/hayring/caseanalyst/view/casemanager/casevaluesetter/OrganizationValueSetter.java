@@ -25,6 +25,7 @@ import cn.hayring.caseanalyst.domain.Organization;
 import cn.hayring.caseanalyst.domain.Relationship;
 import cn.hayring.caseanalyst.utils.Pointer;
 
+@Deprecated
 public class OrganizationValueSetter extends ValueSetter<Organization> {
 
     //标记头像是否改过

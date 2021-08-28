@@ -24,25 +24,26 @@ import java.util.List;
 
 import cn.hayring.caseanalyst.R;
 import cn.hayring.caseanalyst.domain.Listable;
-import cn.hayring.caseanalyst.view.ValueSetter;
+import cn.hayring.caseanalyst.view.casemanager.CaseManagerActivity;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.NodeViewModel;
+import cn.hayring.caseanalyst.view.casemanager.nodevaluesetter.NodeValueSetter;
 import es.dmoral.toasty.Toasty;
 
 public abstract class JetpackListFragment<T extends Listable> extends Fragment {
     /***
-     * 获得本Activity所对应的元素类型
+     * 获得本Activity所对应的结点类型
      * @return
      */
     public abstract Class<T> getTClass();
 
     /***
-     * 获取元素布局id
+     * 获取结点布局id
      * @return
      */
     public abstract int getSingleLayoutId();
 
     /***
-     * 获得本Activity所对应的元素类型
+     * 获得本Activity所对应的结点类型
      * @return
      */
     public abstract Class getValueSetterClass();
@@ -70,7 +71,7 @@ public abstract class JetpackListFragment<T extends Listable> extends Fragment {
     Toolbar toolbar;
 
     /***
-     * 添加元素按钮
+     * 添加结点按钮
      */
     FloatingActionButton createItemButton;
 
@@ -120,7 +121,7 @@ public abstract class JetpackListFragment<T extends Listable> extends Fragment {
         //注册
         createItemButton = view.findViewById(R.id.add_item_button);
         createItemButton.setOnClickListener(new CreateNewItemListener());
-        //新建元素未保存前禁用
+        //新建结点未保存前禁用
         createItemButton.setEnabled(mainActivity.isSaved() || !mainActivity.isCreate());
         //绑定数据源
         itemListRecycler = view.findViewById(R.id.recycler_list);
@@ -141,7 +142,7 @@ public abstract class JetpackListFragment<T extends Listable> extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = (CaseManagerActivity) getContext();
-        viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(getViewModelClass());
+        viewModel = new ViewModelProvider(this).get(getViewModelClass());
         viewModel.getNodeList(getCaseId());
     }
 
@@ -157,30 +158,46 @@ public abstract class JetpackListFragment<T extends Listable> extends Fragment {
         initView(view);
         viewModel.getNodeListData().observe(getViewLifecycleOwner(), nodeListObserver);
         viewModel.getDeleteResponse().observe(getViewLifecycleOwner(), nodeDeletedObserver);
+        viewModel.getNewNode().observe(getViewLifecycleOwner(), nodeCreatedObserver);
     }
 
 
     /***
-     * 新元素点击监听器
+     * 新结点点击监听器
      */
     class CreateNewItemListener implements View.OnClickListener {
 
         /***
-         * 创建新元素
+         * 创建新结点
          * Create new Item
          * @param view
          */
         @Override
         public void onClick(View view) {
+            viewModel.addNode(getCaseId());
+        }
+    }
+
+    /**
+     * 新建结点观察者
+     */
+    private final Observer<T> nodeCreatedObserver = new Observer<T>() {
+        @Override
+        public void onChanged(T node) {
+            mainItemListAdapter.addItemFirst(node);
+            itemListRecycler.scrollToPosition(0);
 
             Intent itemTransporter = new Intent(mainActivity, getValueSetterClass());
             //行为:新建数据行为
-            itemTransporter.putExtra(ValueSetter.CREATE_OR_NOT, true);
+            itemTransporter.putExtra(NodeValueSetter.CREATE_OR_NOT, true);
+            itemTransporter.putExtra(NodeValueSetter.INTENT_KEY_CASE_ID, getCaseId());
+            itemTransporter.putExtra(NodeValueSetter.INTENT_KEY_NODE, node);
+            itemTransporter.putExtra(NodeValueSetter.INDEX, 0);
+
             //启动新Activity
             startActivityForResult(itemTransporter, REQUEST_CODE);
-
         }
-    }
+    };
 
     private final Observer<List<T>> nodeListObserver = new Observer<List<T>>() {
         @Override
@@ -225,13 +242,9 @@ public abstract class JetpackListFragment<T extends Listable> extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent itemTransporter) {
         super.onActivityResult(requestCode, resultCode, itemTransporter);
-        T node = (T) itemTransporter.getSerializableExtra(ValueSetter.DATA);
-        if (itemTransporter.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true)) {
-            mainItemListAdapter.addItem(node);
-        } else {
-            int index = itemTransporter.getIntExtra(ValueSetter.INDEX, mainItemListAdapter.getItemCount());
-            mainItemListAdapter.setItem(index, node);
-        }
+        T node = (T) itemTransporter.getSerializableExtra(NodeValueSetter.INTENT_KEY_NODE);
+        int index = itemTransporter.getIntExtra(NodeValueSetter.INDEX, mainItemListAdapter.getItemCount());
+        mainItemListAdapter.setItem(index, node);
 
 
     }

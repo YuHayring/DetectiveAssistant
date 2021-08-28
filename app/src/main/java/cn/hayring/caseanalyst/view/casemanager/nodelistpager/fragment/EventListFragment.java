@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import cn.hayring.caseanalyst.R;
 import cn.hayring.caseanalyst.domain.Event;
-import cn.hayring.caseanalyst.view.casemanager.casevaluesetter.EventValueSetter;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.JetpackListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.EventViewModel;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.NodeViewModel;
+import cn.hayring.caseanalyst.view.casemanager.nodevaluesetter.EventValueSetter;
 
 public class EventListFragment extends JetpackListFragment<Event> {
     @Override

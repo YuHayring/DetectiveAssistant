@@ -10,15 +10,14 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.lang.reflect.Constructor;
 
 import cn.hayring.caseanalyst.R;
-import cn.hayring.caseanalyst.domain.Case;
 import cn.hayring.caseanalyst.view.caselist.CaseViewModel;
+import cn.hayring.caseanalyst.view.casemanager.CaseManagerActivity;
 
 public class InfoFragment extends Fragment {
 
@@ -106,12 +105,8 @@ public class InfoFragment extends Fragment {
         shortTimeCaseSetter = view.findViewById(R.id.short_time_case_switcher);
         shortTimeCaseSetter.setVisibility(View.INVISIBLE);
         //信息显示
-        if (mainActivity.getCaseInstance() != null) {
-            nameInputer.setText(mainActivity.getCaseInstance().getName());
-            infoInputer.setText(mainActivity.getCaseInstance().getInfo());
-        } else {
-            caseViewModel.getNewCase().observe(getViewLifecycleOwner(), caseObserver);
-        }
+        nameInputer.setText(mainActivity.getCaseInstance().getName());
+        infoInputer.setText(mainActivity.getCaseInstance().getInfo());
 
     }
 
@@ -140,19 +135,7 @@ public class InfoFragment extends Fragment {
     }
 
 
-    /**
-     * 案件变更观察者
-     */
-    private final Observer<Case> caseObserver = new Observer<Case>() {
 
-        @Override
-        public void onChanged(Case caxe) {
-            saveButton.setEnabled(false);
-            saveButton.setVisibility(View.GONE);
-            nameInputer.setText(caxe.getName());
-            infoInputer.setText(caxe.getInfo());
-        }
-    };
 
     @Override
     public void onPause() {

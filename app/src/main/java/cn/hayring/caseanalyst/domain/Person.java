@@ -198,6 +198,15 @@ public class Person implements Avatars, Listable {
         this.gender = gender;
     }
 
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     @Override
     public Integer getImageIndex() {
         return imageIndex;

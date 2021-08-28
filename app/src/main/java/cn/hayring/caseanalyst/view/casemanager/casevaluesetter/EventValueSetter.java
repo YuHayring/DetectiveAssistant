@@ -14,6 +14,7 @@ import cn.hayring.caseanalyst.domain.Event;
 import cn.hayring.caseanalyst.domain.Relationship;
 import cn.hayring.caseanalyst.utils.Pointer;
 
+@Deprecated
 public class EventValueSetter extends ValueSetter<Event> {
 
     /***

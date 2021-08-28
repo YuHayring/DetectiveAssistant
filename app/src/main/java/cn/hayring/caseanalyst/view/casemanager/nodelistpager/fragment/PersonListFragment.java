@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import cn.hayring.caseanalyst.R;
 import cn.hayring.caseanalyst.domain.Person;
-import cn.hayring.caseanalyst.view.casemanager.casevaluesetter.PersonValueSetter;
+import cn.hayring.caseanalyst.view.casemanager.nodevaluesetter.PersonValueSetter;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.JetpackListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.viewmodel.PersonViewModel;
 

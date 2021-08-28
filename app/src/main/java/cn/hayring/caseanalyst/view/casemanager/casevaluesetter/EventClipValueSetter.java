@@ -13,6 +13,7 @@ import cn.hayring.caseanalyst.view.ValueSetter;
 import cn.hayring.caseanalyst.domain.EventClip;
 import cn.hayring.caseanalyst.utils.Pointer;
 
+@Deprecated
 public class EventClipValueSetter extends ValueSetter<EventClip> {
 
     TextView happenDate;
@@ -56,7 +57,6 @@ public class EventClipValueSetter extends ValueSetter<EventClip> {
         saveButton.setOnClickListener(new FinishEditListener());
 
 
-
     }
 
 
@@ -64,6 +64,7 @@ public class EventClipValueSetter extends ValueSetter<EventClip> {
     protected void writeInstance() {
 
     }
+
     @Override
     protected void save() {
 
@@ -74,9 +75,6 @@ public class EventClipValueSetter extends ValueSetter<EventClip> {
         instance.setInfo(infoInputer.getText().toString());
         super.save();
     }
-
-
-
 
 
 }

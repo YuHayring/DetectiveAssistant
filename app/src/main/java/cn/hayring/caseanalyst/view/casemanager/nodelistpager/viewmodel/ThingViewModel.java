@@ -18,7 +18,7 @@ public class ThingViewModel extends NodeViewModel<Thing> {
         return thing;
     }
 
-    public static final String DEFAULT_NEW_NAME = "新地点";
+    public static final String DEFAULT_NEW_NAME = "新物品";
 
     @Override
     public String getDefaultNodeName() {

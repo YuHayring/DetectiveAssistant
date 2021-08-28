@@ -1,4 +1,4 @@
-package cn.hayring.caseanalyst.view.casemanager.nodelistpager;
+package cn.hayring.caseanalyst.view.casemanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +18,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cn.hayring.caseanalyst.R;
 import cn.hayring.caseanalyst.domain.Case;
+import cn.hayring.caseanalyst.domain.Event;
+import cn.hayring.caseanalyst.domain.Person;
+import cn.hayring.caseanalyst.domain.Place;
+import cn.hayring.caseanalyst.domain.Thing;
 import cn.hayring.caseanalyst.view.ValueSetter;
 import cn.hayring.caseanalyst.view.caselist.CaseViewModel;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.InfoFragment;
+import cn.hayring.caseanalyst.view.casemanager.nodelistpager.JetpackListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.EventListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.PersonListFragment;
 import cn.hayring.caseanalyst.view.casemanager.nodelistpager.fragment.PlaceListFragmengt;
@@ -30,10 +36,10 @@ public class CaseManagerActivity extends AppCompatActivity {
     /***
      * 五个Fragment
      */
-    protected Fragment persons;
-    protected Fragment events;
-    protected Fragment things;
-    protected Fragment places;
+    protected JetpackListFragment<Person> persons;
+    protected JetpackListFragment<Event> events;
+    protected JetpackListFragment<Thing> things;
+    protected JetpackListFragment<Place> places;
     protected Fragment info;
     protected Fragment lastFragment;
 
@@ -86,7 +92,6 @@ public class CaseManagerActivity extends AppCompatActivity {
         isCreate = requestInfo.getBooleanExtra(ValueSetter.CREATE_OR_NOT, true);
 
         caseViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CaseViewModel.class);
-        caseViewModel.getNewCase().observe(this, insertIdObserver);
         caseViewModel.getUpdateResponse().observe(this, updateCaseObserver);
 
 
@@ -110,11 +115,7 @@ public class CaseManagerActivity extends AppCompatActivity {
                 });
 
         //获取案件数据
-        if (!isCreate) {
-            caseInstance = (Case) requestInfo.getSerializableExtra(ValueSetter.CASE);
-        } else {
-            caseViewModel.addCase();
-        }
+        caseInstance = (Case) requestInfo.getSerializableExtra(ValueSetter.CASE);
         initView();
         initFragment();
     }
@@ -186,16 +187,6 @@ public class CaseManagerActivity extends AppCompatActivity {
 
 
 
-    /**
-     * 创建新案件观察者
-     */
-    private final Observer<Case> insertIdObserver = new Observer<Case>() {
-
-        @Override
-        public void onChanged(@Nullable Case caxe) {
-            caseInstance = caxe;
-        }
-    };
 
     /**
      * 更新案件观察者
